@@ -18,4 +18,8 @@ public abstract class AbstractPost implements Serializable {
     public String toString(){
         return "timestamp: " + timestamp + "\nauthor: " + '"' + author + '"' + "\ntweet: " + '"' + tweet + '"';
     }
+
+    public String getAuthor(){
+        return author;
+    }
 }

@@ -1,7 +1,6 @@
 package ist.java.data;
 
 import java.io.*;
-import java.net.SocketTimeoutException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,55 +20,57 @@ public class Blog implements Readable, Writable {
     private void populateFromDisk() throws IOException {
         File file = new File(path);
         if (file.exists()) {
-            InputStream fileStream = new FileInputStream(file);
-            ObjectInputStream in = new ObjectInputStream(fileStream);
-            Object post;
-            try {
+            try (InputStream fileStream = new FileInputStream(file);
+                ObjectInputStream in = new ObjectInputStream(fileStream);) {
+                Object post;
                 while (true) {
                     post = in.readObject();
                     tweets.add((AbstractPost) post);
                 }
-            } catch (SocketTimeoutException exc) {
-                // you got the timeout
             } catch (EOFException exc) {
-                // end of stream
-            } catch (IOException exc) {
-                // some other I/O error: print it, log it, etc.
-                exc.printStackTrace(); // for example
+                System.out.println("Database correctly read from disk");
+            } catch (FileNotFoundException exc) {
+                System.out.println("Database" + path + "does not found or cannot be opened for reading.");
+            } catch (ObjectStreamException exc) {
+                System.out.println("Problem reading data from Database" + path);
             } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                System.out.println("Class of a serialized object cannot be found");
             }
-            in.close();
-
         } else {
-            OutputStream fileStream = new FileOutputStream(file);
-            ObjectOutputStream out = new ObjectOutputStream(fileStream);
-            out.close();
+            try (OutputStream fileStream = new FileOutputStream(file);
+                    ObjectOutputStream out = new ObjectOutputStream(fileStream);) {
+            } catch (FileNotFoundException exc) {
+                System.out.println("Database '" + path + "' does not found or cannot be opened for reading.");
+            }
         }
     }
 
     @Override
     public void save() throws IOException {
         File file = new File(path);
-        OutputStream fileStream = new FileOutputStream(file, false);
-        if (!file.exists()) {
-            System.out.println("Error saving file, the file corrupted!");
-            System.exit(0);
-        } 
-        else {
-            ObjectOutputStream out = new ObjectOutputStream(fileStream);
-            for (AbstractPost p : tweets) {
-                out.writeObject(p);
+        try (OutputStream fileStream = new FileOutputStream(file, false);
+                ObjectOutputStream out = new ObjectOutputStream(fileStream);) {
+            if (!file.exists()) {
+                System.out.println("Error saving database, it is corrupted!");
+                System.exit(0);
+            } else {
+                for (AbstractPost p : tweets) {
+                    out.writeObject(p);
+                }
             }
-            out.close();
+        } 
+        catch (FileNotFoundException exc) {
+            System.out.println("Database '" + path + "' does not found or cannot be opened for reading.");
         }
         return;
     }
 
     @Override
     public AbstractPost readOne() {
-        return null;
+        if(!tweets.isEmpty())
+            return tweets.get(tweets.size() - 1);
+        else
+            return null;
     }
 
     @Override
@@ -78,8 +79,13 @@ public class Blog implements Readable, Writable {
     }
 
     @Override
-    public List<AbstractPost> readOwnPost() throws IOException {
-        return null;
+    public List<AbstractPost> readOwnPost(String name) throws IOException {
+        List<AbstractPost> ownPosts = new LinkedList<>();
+        for (AbstractPost p : tweets) {
+            if (p.getAuthor().equals(name))
+                ownPosts.add(p);
+        }
+        return ownPosts;
     }
 
     public void addPost(AbstractPost p) {
@@ -87,7 +93,7 @@ public class Blog implements Readable, Writable {
         try {
             this.save();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Catched problems saving the database");
             e.printStackTrace();
         }
         return;

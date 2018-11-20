@@ -3,8 +3,14 @@ import ist.java.data.*;
 import java.util.Date;
 
 public class PostRequest extends AbstractPost {
-    public PostRequest(String name, Date timestamp){
+    protected int type;
+    public PostRequest(String name, int type, Date timestamp){
         this.author = name;
+        this.type = type;
         this.timestamp = timestamp;
+    }
+
+    public int getType(){
+        return type;
     }
 }
