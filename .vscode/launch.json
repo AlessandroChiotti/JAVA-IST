@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Client",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "ist.java.client.Client",
+            "args": "",
+            "projectName": "ist-java-project"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BlogServer",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "ist.java.server.BlogServer",
+            "args": "",
+            "projectName": "ist-java-project"
+        }
+    ]
+}

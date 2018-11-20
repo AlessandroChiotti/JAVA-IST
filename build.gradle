@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+task runServer(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'ist.java.server.BlogServer'
+    standardInput = System.in
+
+}
+
+task runClient(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'ist.java.client.Client'
+    standardInput = System.in
+}
+
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.5'
+}
