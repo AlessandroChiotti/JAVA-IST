@@ -22,8 +22,8 @@ public class Client {
         // Start the client
         // socket, connect
         try (Socket clientSocket = new Socket(hostName, portNumber);
-                ObjectOutputStream Objout = new ObjectOutputStream(clientSocket.getOutputStream());
-                ObjectInputStream Objin = new ObjectInputStream(clientSocket.getInputStream());) {
+            ObjectOutputStream Objout = new ObjectOutputStream(clientSocket.getOutputStream());
+            ObjectInputStream Objin = new ObjectInputStream(clientSocket.getInputStream());) {
 
             String selection;
             Scanner scanner = new Scanner(System.in);
