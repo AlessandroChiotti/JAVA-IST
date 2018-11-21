@@ -16,14 +16,14 @@ public class BlogServer {
         int portNumber = Integer.parseInt(args[0]);
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber);) {
-            System.out.println("Sever is running...");
+            System.out.println("Server is running...");
 
             while (true) {
                 //System.out.println("Waiting for a new client...");
                 try {
                     // accept
                     Socket clientSocket = serverSocket.accept();
-                    System.out.println("Client " + clientSocket.getLocalSocketAddress()+ clientSocket.getLocalPort() + " connected\n");
+                    System.out.println("Client " + clientSocket.getLocalSocketAddress() + " connected\n");
                     Connect newConnection = new Connect(clientSocket, blog);
                     newConnection.start();
                 } catch (SocketTimeoutException exc) {

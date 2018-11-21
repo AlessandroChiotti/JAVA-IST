@@ -81,7 +81,7 @@ class Connect extends Thread
                     System.out.println("Class of a serialized object cannot be found");
                     System.exit(1);
                 } catch (ObjectStreamException exc) {
-                    System.out.println("Problem receiving or sendind objects from/to client "
+                    System.out.println("Problem receiving or sending objects from/to client "
                             + clientSocket.getLocalSocketAddress());
                     System.exit(1);
                 } catch (EOFException exc) {
@@ -92,9 +92,14 @@ class Connect extends Thread
 
                 }
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		catch (ObjectStreamException exc) {
+            System.out.println("Problem receiving or sending objects from/to client "
+                    + clientSocket.getLocalSocketAddress());
+            System.exit(1);
+        } catch (IOException exc) {
+            System.out.println("I/O Exception interacting with the client");
+            System.exit(1);
+        }
+        
 	}
 }
