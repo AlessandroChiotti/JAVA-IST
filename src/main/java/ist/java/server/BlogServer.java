@@ -13,11 +13,11 @@ public class BlogServer {
     private static Blog blog = new Blog();
 
     public static void main(String... args) throws IOException, ClassNotFoundException {
-        // if (args.length != 1) {
-        //     System.err.println("Usage: .\\gradlew runServer --args '<port number>'");
-        //     System.exit(0);
-        // }
-        int portNumber = 4040; //Integer.parseInt(args[0]);
+        if (args.length != 1) {
+            System.err.println("Usage: .\\gradlew runServer --args '<port number>'");
+            System.exit(0);
+        }
+        int portNumber = Integer.parseInt(args[0]);
         Object object;
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber);) {
